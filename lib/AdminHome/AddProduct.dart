@@ -63,7 +63,7 @@ class AddProduct extends StatelessWidget {
 
               },
 
-              hint: 'Product Price',
+              hint: 'Product Price', icon: null,
 
             ),
 

@@ -25,6 +25,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _auth = Auth();
+  logout(context) async {
+    SharedPreferences sh = await SharedPreferences.getInstance();
+
+    sh.clear();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
 
   FirebaseUser _loggedUser;
 
@@ -52,11 +59,10 @@ class _HomePageState extends State<HomePage> {
                 if (value == 2) {
                   SharedPreferences pref =
                       await SharedPreferences.getInstance();
+
                   pref.clear();
 
-
                   await _auth.signOut();
-
                   Navigator.pushNamed(context, LoginScreen.id);
                 }
 
@@ -141,14 +147,22 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Navigator.pushNamed(context, CartScreen.id);
                       },
-                      child: Icon(Icons.shopping_cart,color:kMainColor ,)),
-                  GestureDetector(
+                      child: Icon(
+                        Icons.shopping_cart,
+                        color: kMainColor,
+                      )),
+                  RaisedButton(
+                    child: Text("out"),
+                    onPressed: () async {
+                      SharedPreferences pref =
+                          await SharedPreferences.getInstance();
 
-                      onTap: () {
-                        _auth.signOut();
-                        Navigator.pushNamed(context, LoginScreen.id);
-                      },
-                      child: Text("Sign Out"))
+                      pref.clear();
+
+                      _auth.signOut();
+                      Navigator.popAndPushNamed(context, LoginScreen.id);
+                    },
+                  )
                 ],
               ),
             ),

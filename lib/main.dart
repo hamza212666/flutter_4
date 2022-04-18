@@ -92,7 +92,7 @@ class Flutter003 extends StatelessWidget {
 
               debugShowCheckedModeBanner: false,
 
-              initialRoute: isUserLoggedIn ? LoginScreen.id :HomePage .id,
+              initialRoute: isUserLoggedIn ? HomePage.id : LoginScreen.id,
 
               routes: {
 

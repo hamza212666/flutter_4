@@ -23,20 +23,21 @@ class AdminHome extends StatelessWidget {
            child: Expanded(
              child: Container(
                  color: Colors.amber,
-                 child: GestureDetector(
+                 child: RaisedButton(
+                   child: Text("out"),
+                   onPressed: () async {
+                     SharedPreferences pref = await SharedPreferences.getInstance();
 
-                     onTap: () {
-                       _auth.signOut();
-                       Navigator.pushNamed(context, LoginScreen.id);
-                     },
-                     child: Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Text("Sign Out"),
-                     ))
+                     pref.clear();
+
+                     _auth.signOut();
+                     Navigator.pushNamed(context, LoginScreen.id);
+                   },
              ),
            ),
          ),
-       ],
+         )
+       ]
       ),
       backgroundColor: kMainColor,
       body: Column(
