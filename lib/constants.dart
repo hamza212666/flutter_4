@@ -13,6 +13,7 @@ const kProductPrice = 'productPrice';
 const kProductDescription = 'productDescription';
 
 const kProductLocation = 'productLocation';
+const kProductimage = 'Productimage';
 
 const kProductCategory = 'productCategory';
 

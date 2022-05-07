@@ -22,6 +22,7 @@ class Store {
       kProductDescription: product.pDescription,
 
       kProductLocation: product.pLocation,
+      kProductimage: product.pimage,
 
       kProductCategory: product.pCategory,
 

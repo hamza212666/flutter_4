@@ -1,20 +1,27 @@
 
+import 'dart:io';
 
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter3/Model/Product.dart';
 import 'package:flutter3/Screen/services/Store.dart';
 import 'package:flutter3/widgets/CustomTextField.dart';
+import 'package:image_downloader/image_downloader.dart';
+import 'package:image_picker/image_picker.dart';
 
-
-
-
-
-class AddProduct extends StatelessWidget {
+class AddProduct extends StatefulWidget {
 
   static String id = 'AddProduct';
 
-  String _name, _price, _description, _category, _imageLocation;
+  @override
+  _AddProductState createState() => _AddProductState();
+}
 
+class _AddProductState extends State<AddProduct> {
+  String _name, _price, _description, _category, _imageLocation;
+  File _image;
+  String _url;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   final _store = Store();
@@ -25,140 +32,174 @@ class AddProduct extends StatelessWidget {
 
     return Scaffold(
 
-      resizeToAvoidBottomInset: false,
 
       body: Form(
 
         key: _globalKey,
 
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-
+        child: ListView(
           children: <Widget>[
+        Column(
 
-            CustomTextField(
+            mainAxisAlignment: MainAxisAlignment.center,
 
-              hint: 'Product Name',
+            children: <Widget>[
 
-              onClick: (value) {
+              CustomTextField(
 
-                _name = value;
+                hint: 'Product Name',
 
-              },
+                onClick: (value) {
 
-            ),
+                  _name = value;
 
-            SizedBox(
+                },
 
-              height: 10,
+              ),
 
-            ),
+              SizedBox(
 
-            CustomTextField(
+                height: 10,
 
-              onClick: (value) {
+              ),
 
-                _price = value;
+              CustomTextField(
 
-              },
+                onClick: (value) {
 
-              hint: 'Product Price', icon: null,
+                  _price = value;
 
-            ),
+                },
 
-            SizedBox(
+                hint: 'Product Price', icon: null,
 
-              height: 10,
+              ),
 
-            ),
+              SizedBox(
 
-            CustomTextField(
+                height: 10,
 
-              onClick: (value) {
+              ),
 
-                _description = value;
+              CustomTextField(
 
-              },
+                onClick: (value) {
 
-              hint: 'Product Description',
+                  _description = value;
 
-            ),
+                },
 
-            SizedBox(
+                hint: 'Product Description',
 
-              height: 10,
+              ),
 
-            ),
+              SizedBox(
 
-            CustomTextField(
+                height: 10,
 
-              onClick: (value) {
+              ),
 
-                _category = value;
+              CustomTextField(
 
-              },
+                onClick: (value) {
 
-              hint: 'Product Category',
+                  _category = value;
 
-            ),
+                },
 
-            SizedBox(
+                hint: 'Product Category',
 
-              height: 10,
+              ),
 
-            ),
+              SizedBox(
 
-            CustomTextField(
+                height: 10,
 
-              onClick: (value) {
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: _image == null ? null : FileImage(_image),
+                    radius: 80,
+                  ),
+                  GestureDetector(onTap: pickImage, child: Icon(Icons.camera_alt)),
+                  GestureDetector(onTap: getImageGallery, child: Icon(Icons.get_app)),
+                ],
+              ),
 
-                _imageLocation = value;
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Builder(
+                    builder: (context) => RaisedButton(
+                      onPressed: () {
+                        uploadImage(context);
+                      },
+                      child: Text('Upload Image'),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  RaisedButton(
+                    onPressed: loadImage,
+                    child: Text('Load Image'),
+                  )
+                ],
+              ),
+              CustomTextField(
 
-              },
+                onClick: (value) {
 
-              hint: 'Product Location',
+                  _imageLocation = value;
 
-            ),
+                },
 
-            SizedBox(
+                hint: 'Product Location',
 
-              height: 20,
+              ),
 
-            ),
+              SizedBox(
 
-            RaisedButton(
+                height: 20,
 
-              onPressed: () {
+              ),
 
-                if (_globalKey.currentState.validate()) {
+              RaisedButton(
 
-                  _globalKey.currentState.save();
+                onPressed: () {
+
+                  if (_globalKey.currentState.validate()) {
+
+                    _globalKey.currentState.save();
 
 
 
-                  _store.addProduct(Product(
+                    _store.addProduct(Product(
 
-                      pName: _name,
+                        pName: _name,
 
-                      pPrice: _price,
+                        pPrice: _price,
+                        pimage:_url,
+                        pDescription: _description,
 
-                      pDescription: _description,
+                        pLocation: _imageLocation,
 
-                      pLocation: _imageLocation,
+                        pCategory: _category));
 
-                      pCategory: _category));
+                  }
 
-                }
+                },
 
-              },
+                child: Text('Add Product'),
 
-              child: Text('Add Product'),
+              )
 
-            )
+            ],
 
-          ],
-
+          ),
+        ]
         ),
 
       ),
@@ -166,5 +207,46 @@ class AddProduct extends StatelessWidget {
     );
 
   }
+  void loadImage() async {
+    var imageId = await ImageDownloader.downloadImage(_url);
+    var path = await ImageDownloader.findPath(imageId);
+    File image = File(path);
+    setState(() {
+      _image = image;
+    });
+  }
+  Future getImageGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image ;
+    });
+  }
+  void pickImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
+    setState(() {
+      _image = image  ;
+    });
+  }
+  void uploadImage(context) async {
+    try {
+      FirebaseStorage storage =
+      FirebaseStorage(storageBucket: 'gs://swwet1-c37cc.appspot.com');
+      StorageReference ref = storage.ref().child(_image.path);
+      StorageUploadTask storageUploadTask = ref.putFile(_image);
+      StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('success'),
+      ));
+      String url = await taskSnapshot.ref.getDownloadURL();
+      print('url $url');
+      setState(() {
+        _url = url;
+      });
+    } catch (ex) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(ex.message),
+      ));
+    }
+  }
 }
