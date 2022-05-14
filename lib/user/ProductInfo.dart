@@ -1,9 +1,8 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter3/Model/Product.dart';
-import 'package:flutter3/Screen/provider/CartItem.dart';
-import 'package:flutter3/user/CartScreen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -45,14 +44,11 @@ class _ProductInfoState extends State<ProductInfo> {
 
             width: MediaQuery.of(context).size.width,
 
-            child: Image(
-
-              fit: BoxFit.fill,
-
-              image: AssetImage(product.pLocation),
-
+            child:  CachedNetworkImage(
+              imageUrl: product.pimage,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
-
           ),
 
           Padding(
@@ -79,15 +75,7 @@ class _ProductInfoState extends State<ProductInfo> {
 
                       child: Icon(Icons.arrow_back_ios)),
 
-                  GestureDetector(
 
-                      onTap: () {
-
-                        Navigator.pushNamed(context, CartScreen.id);
-
-                      },
-
-                      child: Icon(Icons.shopping_cart))
 
                 ],
 
@@ -179,65 +167,9 @@ class _ProductInfoState extends State<ProductInfo> {
 
                             children: <Widget>[
 
-                              ClipOval(
 
-                                child: Material(
 
-                                  color: kMainColor,
 
-                                  child: GestureDetector(
-
-                                    onTap: add,
-
-                                    child: SizedBox(
-
-                                      child: Icon(Icons.add),
-
-                                      height: 32,
-
-                                      width: 32,
-
-                                    ),
-
-                                  ),
-
-                                ),
-
-                              ),
-
-                              Text(
-
-                                _quantity.toString(),
-
-                                style: TextStyle(fontSize: 60),
-
-                              ),
-
-                              ClipOval(
-
-                                child: Material(
-
-                                  color: kMainColor,
-
-                                  child: GestureDetector(
-
-                                    onTap: subtract,
-
-                                    child: SizedBox(
-
-                                      child: Icon(Icons.remove),
-
-                                      height: 32,
-
-                                      width: 32,
-
-                                    ),
-
-                                  ),
-
-                                ),
-
-                              ),
 
                             ],
 
@@ -255,47 +187,7 @@ class _ProductInfoState extends State<ProductInfo> {
 
                 ),
 
-                ButtonTheme(
 
-                  minWidth: MediaQuery.of(context).size.width,
-
-                  height: MediaQuery.of(context).size.height * .08,
-
-                  child: Builder(
-
-                    builder: (context) => RaisedButton(
-
-                      shape: RoundedRectangleBorder(
-
-                          borderRadius: BorderRadius.only(
-
-                              topRight: Radius.circular(10),
-
-                              topLeft: Radius.circular(10))),
-
-                      color: kMainColor,
-
-                      onPressed: () {
-
-                        addToCart(context, product);
-
-                      },
-
-                      child: Text(
-
-                        'Add to Cart'.toUpperCase(),
-
-                        style: TextStyle(
-
-                            fontSize: 18, fontWeight: FontWeight.bold),
-
-                      ),
-
-                    ),
-
-                  ),
-
-                ),
 
               ],
 
@@ -313,78 +205,9 @@ class _ProductInfoState extends State<ProductInfo> {
 
 
 
-  subtract() {
-
-    if (_quantity > 1) {
-
-      setState(() {
-
-        _quantity--;
-
-        print(_quantity);
-
-      });
-
-    }
-
-  }
 
 
 
-  add() {
 
-    setState(() {
-
-      _quantity++;
-
-      print(_quantity);
-
-    });
-
-  }
-
-
-
-  void addToCart(context, product) {
-
-    CartItem cartItem = Provider.of<CartItem>(context, listen: false);
-
-    product.pQuantity = _quantity;
-
-    bool exist = false;
-
-    var productsInCart = cartItem.products;
-
-    for (var productInCart in productsInCart) {
-
-      if (productInCart.pName == product.pName) {
-
-        exist = true;
-
-      }
-
-    }
-
-    if (exist) {
-
-      Scaffold.of(context).showSnackBar(SnackBar(
-
-        content: Text('you\'ve added this item before'),
-
-      ));
-
-    } else {
-
-      cartItem.addProduct(product);
-
-      Scaffold.of(context).showSnackBar(SnackBar(
-
-        content: Text('Added to Cart'),
-
-      ));
-
-    }
-
-  }
 
 }

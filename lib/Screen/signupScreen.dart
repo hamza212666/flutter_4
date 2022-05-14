@@ -9,10 +9,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:flutter3/AdminHome/adminHome.dart';
 import 'package:flutter3/Screen/provider/modelHud.dart';
 import 'package:flutter3/Screen/services/auth.dart';
 import 'package:flutter3/constants.dart';
-import 'package:flutter3/user/HomePage.dart';
 import 'package:flutter3/widgets/CustomTextField.dart';
 import 'package:flutter3/widgets/cutsom_logo..dart';
 
@@ -151,7 +151,7 @@ class SignupScreen extends StatelessWidget {
 
                           modelhud.changeisLoading(false);
 
-                          Navigator.pushNamed(context, HomePage.id);
+                          Navigator.pushNamed(context, AdminHome.id);
 
                         } on PlatformException catch (e) {
 

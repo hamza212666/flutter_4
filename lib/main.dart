@@ -5,16 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter3/AdminHome/AddProduct.dart';
 import 'package:flutter3/AdminHome/ManageProducts.dart';
-import 'package:flutter3/AdminHome/OrderDetails.dart';
-import 'package:flutter3/AdminHome/OrdersScreen.dart';
+
 import 'package:flutter3/Screen/LogInScreen.dart';
 import 'package:flutter3/Screen/provider/Adminmod.dart';
 import 'package:flutter3/Screen/provider/CartItem.dart';
 import 'package:flutter3/Screen/provider/modelHud.dart';
 import 'package:flutter3/Screen/services/ProductInfo.dart';
 import 'package:flutter3/constants.dart';
-import 'package:flutter3/user/CartScreen.dart';
-import 'package:flutter3/user/HomePage.dart';
+
 
 import 'package:provider/provider.dart';
 
@@ -92,15 +90,11 @@ class Flutter003 extends StatelessWidget {
 
               debugShowCheckedModeBanner: false,
 
-              initialRoute: isUserLoggedIn ? HomePage.id : LoginScreen.id,
+              initialRoute: isUserLoggedIn ? AdminHome.id : LoginScreen.id,
 
               routes: {
 
-                OrderDetails.id: (context) => OrderDetails(),
 
-                OrdersScreen.id: (context) => OrdersScreen(),
-
-                CartScreen.id: (context) => CartScreen(),
 
                 ProductInfo.id: (context) => ProductInfo(),
 
@@ -112,7 +106,6 @@ class Flutter003 extends StatelessWidget {
 
                 SignupScreen.id: (context) => SignupScreen(),
 
-                HomePage.id: (context) => HomePage(),
 
                 AdminHome.id: (context) => AdminHome(),
 

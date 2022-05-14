@@ -6,7 +6,6 @@ import 'package:flutter3/Screen/provider/Adminmod.dart';
 import 'package:flutter3/Screen/provider/modelHud.dart';
 import 'package:flutter3/Screen/services/auth.dart';
 import 'package:flutter3/Screen/signupScreen.dart';
-import 'package:flutter3/user/HomePage.dart';
 import 'package:flutter3/widgets/CustomTextField.dart';
 import 'package:flutter3/widgets/cutsom_logo..dart';
 
@@ -398,7 +397,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           await _auth.signIn(_email.trim(), password.trim());
 
-          Navigator.pushNamed(context, HomePage.id);
+          Navigator.pushNamed(context, AdminHome.id);
 
         } catch (e) {
 

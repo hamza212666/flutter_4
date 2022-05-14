@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +9,6 @@ import 'package:image_downloader/image_downloader.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProduct extends StatefulWidget {
-
   static String id = 'AddProduct';
 
   @override
@@ -19,7 +16,7 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  String _name, _price, _description, _category, _imageLocation;
+  String _name, _price, _description;
   File _image;
   String _url;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
@@ -27,107 +24,55 @@ class _AddProductState extends State<AddProduct> {
   final _store = Store();
 
   @override
-
   Widget build(BuildContext context) {
-
     return Scaffold(
-
-
       body: Form(
-
         key: _globalKey,
-
-        child: ListView(
-          children: <Widget>[
-        Column(
-
+        child: ListView(children: <Widget>[
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: <Widget>[
-
               CustomTextField(
-
-                hint: 'Product Name',
-
+                hint: 'Book Name',
                 onClick: (value) {
-
                   _name = value;
-
                 },
-
               ),
-
               SizedBox(
-
                 height: 10,
-
               ),
-
               CustomTextField(
-
                 onClick: (value) {
-
                   _price = value;
-
                 },
-
-                hint: 'Product Price', icon: null,
-
+                hint: 'Book Price',
+                icon: null,
               ),
-
               SizedBox(
-
                 height: 10,
-
               ),
-
               CustomTextField(
-
                 onClick: (value) {
-
                   _description = value;
-
                 },
-
-                hint: 'Product Description',
-
+                hint: 'Book Description',
               ),
-
               SizedBox(
-
                 height: 10,
-
-              ),
-
-              CustomTextField(
-
-                onClick: (value) {
-
-                  _category = value;
-
-                },
-
-                hint: 'Product Category',
-
-              ),
-
-              SizedBox(
-
-                height: 10,
-
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  GestureDetector(
+                      onTap: pickImage, child: Icon(Icons.camera_alt)),
                   CircleAvatar(
                     backgroundImage: _image == null ? null : FileImage(_image),
                     radius: 80,
                   ),
-                  GestureDetector(onTap: pickImage, child: Icon(Icons.camera_alt)),
-                  GestureDetector(onTap: getImageGallery, child: Icon(Icons.get_app)),
+                  GestureDetector(
+                      onTap: getImageGallery, child: Icon(Icons.get_app)),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -142,71 +87,33 @@ class _AddProductState extends State<AddProduct> {
                   SizedBox(
                     width: 10,
                   ),
-                  RaisedButton(
-                    onPressed: loadImage,
-                    child: Text('Load Image'),
-                  )
                 ],
               ),
-              CustomTextField(
-
-                onClick: (value) {
-
-                  _imageLocation = value;
-
-                },
-
-                hint: 'Product Location',
-
-              ),
-
               SizedBox(
-
                 height: 20,
-
               ),
-
               RaisedButton(
-
                 onPressed: () {
-
                   if (_globalKey.currentState.validate()) {
-
                     _globalKey.currentState.save();
 
-
-
                     _store.addProduct(Product(
-
-                        pName: _name,
-
-                        pPrice: _price,
-                        pimage:_url,
-                        pDescription: _description,
-
-                        pLocation: _imageLocation,
-
-                        pCategory: _category));
-
+                      pName: _name,
+                      pPrice: _price,
+                      pimage: _url,
+                      pDescription: _description,
+                    ));
                   }
-
                 },
-
-                child: Text('Add Product'),
-
+                child: Text('Add Book'),
               )
-
             ],
-
           ),
-        ]
-        ),
-
+        ]),
       ),
-
     );
-
   }
+
   void loadImage() async {
     var imageId = await ImageDownloader.downloadImage(_url);
     var path = await ImageDownloader.findPath(imageId);
@@ -215,23 +122,26 @@ class _AddProductState extends State<AddProduct> {
       _image = image;
     });
   }
+
   Future getImageGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      _image = image ;
+      _image = image;
     });
   }
+
   void pickImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
-      _image = image  ;
+      _image = image;
     });
   }
+
   void uploadImage(context) async {
     try {
       FirebaseStorage storage =
-      FirebaseStorage(storageBucket: 'gs://swwet1-c37cc.appspot.com');
+          FirebaseStorage(storageBucket: 'gs://swwet1-c37cc.appspot.com');
       StorageReference ref = storage.ref().child(_image.path);
       StorageUploadTask storageUploadTask = ref.putFile(_image);
       StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;

@@ -11,7 +11,7 @@ class EditProduct extends StatelessWidget {
 
   static String id = 'EditProduct';
 
-  String _name, _price, _description, _category, _imageLocation;
+  String _name, _price, _description;
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
@@ -99,17 +99,7 @@ class EditProduct extends StatelessWidget {
 
                 ),
 
-                CustomTextField(
 
-                  onClick: (value) {
-
-                    _category = value;
-
-                  },
-
-                  hint: 'Product Category',
-
-                ),
 
                 SizedBox(
 
@@ -117,17 +107,7 @@ class EditProduct extends StatelessWidget {
 
                 ),
 
-                CustomTextField(
 
-                  onClick: (value) {
-
-                    _imageLocation = value;
-
-                  },
-
-                  hint: 'Product Location',
-
-                ),
 
                 SizedBox(
 
@@ -149,9 +129,7 @@ class EditProduct extends StatelessWidget {
 
                         kProductName: _name,
 
-                        kProductLocation: _imageLocation,
 
-                        kProductCategory: _category,
 
                         kProductDescription: _description,
 

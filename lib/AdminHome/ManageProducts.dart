@@ -1,5 +1,6 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
@@ -61,9 +62,9 @@ class _ManageProductsState extends State<ManageProducts> {
 
                   pDescription: data[kProductDescription],
 
-                  pLocation: data[kProductLocation],
+                  pimage: data[kProductimage],
 
-                  pCategory: data[kProductCategory]));
+                 ));
 
             }
 
@@ -139,12 +140,12 @@ class _ManageProductsState extends State<ManageProducts> {
 
                       Positioned.fill(
 
-                        child: Image(
-
-                          fit: BoxFit.fill,
-
-                          image: AssetImage(products[index].pLocation),
-
+                        child: CachedNetworkImage(
+                          imageUrl: products[index].pimage,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
 
                       ),

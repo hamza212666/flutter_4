@@ -21,10 +21,8 @@ class Store {
 
       kProductDescription: product.pDescription,
 
-      kProductLocation: product.pLocation,
       kProductimage: product.pimage,
 
-      kProductCategory: product.pCategory,
 
       kProductPrice: product.pPrice
 
@@ -42,27 +40,7 @@ class Store {
 
 
 
-  Stream<QuerySnapshot> loadOrders() {
 
-    return _firestore.collection(kOrders).snapshots();
-
-  }
-
-
-
-  Stream<QuerySnapshot> loadOrderDetails(documentId) {
-
-    return _firestore
-
-        .collection(kOrders)
-
-        .document(documentId)
-
-        .collection(kOrderDetails)
-
-        .snapshots();
-
-  }
 
 
 
@@ -88,30 +66,6 @@ class Store {
 
 
 
-  storeOrders(data, List<Product> products) {
 
-    var documentRef = _firestore.collection(kOrders).document();
-
-    documentRef.setData(data);
-
-    for (var product in products) {
-
-      documentRef.collection(kOrderDetails).document().setData({
-
-        kProductName: product.pName,
-
-        kProductPrice: product.pPrice,
-
-        kProductQuantity: product.pQuantity,
-
-        kProductLocation: product.pLocation,
-
-        kProductCategory: product.pCategory
-
-      });
-
-    }
-
-  }
 
 }

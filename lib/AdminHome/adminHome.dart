@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter3/AdminHome/AddProduct.dart';
 import 'package:flutter3/AdminHome/ManageProducts.dart';
-import 'package:flutter3/AdminHome/OrdersScreen.dart';
 import 'package:flutter3/Screen/LogInScreen.dart';
 import 'package:flutter3/Screen/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,12 +58,6 @@ class AdminHome extends StatelessWidget {
             },
             child: Text('Edit Product'),
           ),
-          RaisedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, OrdersScreen.id);
-            },
-            child: Text('View orders'),
-          )
         ],
       ),
     );
